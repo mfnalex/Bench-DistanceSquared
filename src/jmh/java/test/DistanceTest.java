@@ -2,6 +2,7 @@ package test;
 
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
@@ -18,11 +19,14 @@ import java.util.concurrent.TimeUnit;
 public class DistanceTest {
 
     private record Pos(double x, double y, double z) {
-        private double distanceSquared(Pos other) {
+        private double distanceSquaredStandalone(Pos other) {
             double dx = x - other.x;
             double dy = y - other.y;
             double dz = z - other.z;
             return dx * dx + dy * dy + dz * dz;
+        }
+        private double distanceSquared(Pos other) {
+            return Math.sqrt(distance(other));
         }
         private double distance(Pos other) {
             double dx = x - other.x;
@@ -34,8 +38,9 @@ public class DistanceTest {
     private int nums = 1000;
     private Pos[] pos1 = new Pos[nums];
     private Pos[] pos2 = new Pos[nums];
-    @Setup
+    @Setup(Level.Invocation)
     public void init() {
+        //System.out.println("init called");
         for(int i = 0; i < nums; i++) {
             pos1[i] = (new Pos(Math.random(), Math.random(), Math.random()));
             pos2[i] = (new Pos(Math.random(), Math.random(), Math.random()));
@@ -51,6 +56,12 @@ public class DistanceTest {
     public void testDistanceSquared(Blackhole hole) {
         for(int i = 0; i < nums; i++) {
             hole.consume(pos1[i].distanceSquared(pos2[i]));
+        }
+    }
+    @Benchmark
+    public void testDistanceSquaredStandalone(Blackhole hole) {
+        for(int i = 0; i < nums; i++) {
+            hole.consume(pos1[i].distanceSquaredStandalone(pos2[i]));
         }
     }
 
