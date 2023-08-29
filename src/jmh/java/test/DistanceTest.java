@@ -2,20 +2,30 @@ package test;
 
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@State(Scope.Benchmark)
+//@State(Scope.Benchmark)
+//@OutputTimeUnit(TimeUnit.NANOSECONDS)
+//@BenchmarkMode({org.openjdk.jmh.annotations.Mode.AverageTime})
+@BenchmarkMode(Mode.All)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
-@BenchmarkMode({org.openjdk.jmh.annotations.Mode.AverageTime})
+@State(Scope.Benchmark)
+@Fork(value = 2, jvmArgs = {"-Xms2G", "-Xmx2G"})
+@Warmup(iterations = 3, time = 2)
+@Measurement(iterations = 4, time = 3)
 public class DistanceTest {
 
     private record Pos(double x, double y, double z) {
