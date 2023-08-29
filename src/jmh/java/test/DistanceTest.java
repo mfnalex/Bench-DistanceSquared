@@ -38,7 +38,7 @@ public class DistanceTest {
     private int nums = 1000;
     private Pos[] pos1 = new Pos[nums];
     private Pos[] pos2 = new Pos[nums];
-    @Setup(Level.Invocation)
+    @Setup(Level.Iteration)
     public void init() {
         //ystem.out.println("init called");
         for(int i = 0; i < nums; i++) {
