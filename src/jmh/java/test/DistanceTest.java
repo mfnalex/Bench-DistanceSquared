@@ -19,16 +19,16 @@ import java.util.concurrent.TimeUnit;
 public class DistanceTest {
 
     private record Pos(double x, double y, double z) {
-        private double distanceSquaredStandalone(Pos other) {
+        private double distanceSquared(Pos other) {
             double dx = x - other.x;
             double dy = y - other.y;
             double dz = z - other.z;
             return dx * dx + dy * dy + dz * dz;
         }
-        private double distanceSquared(Pos other) {
-            return Math.sqrt(distance(other));
-        }
         private double distance(Pos other) {
+            return Math.sqrt(distanceSquared(other));
+        }
+        private double distanceStandalone(Pos other) {
             double dx = x - other.x;
             double dy = y - other.y;
             double dz = z - other.z;
@@ -59,9 +59,9 @@ public class DistanceTest {
         }
     }
     @Benchmark
-    public void testDistanceSquaredStandalone(Blackhole hole) {
+    public void testDistanceStandalone(Blackhole hole) {
         for(int i = 0; i < nums; i++) {
-            hole.consume(pos1[i].distanceSquaredStandalone(pos2[i]));
+            hole.consume(pos1[i].distanceStandalone(pos2[i]));
         }
     }
 
