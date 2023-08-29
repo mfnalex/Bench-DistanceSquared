@@ -40,11 +40,15 @@ public class DistanceTest {
     private Pos[] pos2 = new Pos[nums];
     @Setup(Level.Invocation)
     public void init() {
-        //System.out.println("init called");
+        //ystem.out.println("init called");
         for(int i = 0; i < nums; i++) {
             pos1[i] = (new Pos(Math.random(), Math.random(), Math.random()));
             pos2[i] = (new Pos(Math.random(), Math.random(), Math.random()));
         }
+//        for(int i = 0; i < nums; i++) {
+//            pos1[i] = (new Pos(1, 2, 3));
+//            pos2[i] = (new Pos(4, 5, 6));
+//        }
     }
     @Benchmark
     public void testDistance(Blackhole hole) {
